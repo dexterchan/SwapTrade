@@ -1,6 +1,7 @@
 package NoSqlEval.SwapTrade;
 
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 public class SwapTrade1 {
@@ -15,7 +16,15 @@ public class SwapTrade1 {
 	Date EndDate;
 	
 	List<AssetLeg> assets;
-
+	
+	public SwapTrade1(){
+		assets = new LinkedList<AssetLeg>();
+	}
+	
+	public void insertAsset(AssetLeg f){
+		assets.add(f);
+	}
+	
 	public String get_id() {
 		return _id;
 	}
@@ -80,13 +89,7 @@ public class SwapTrade1 {
 		EndDate = endDate;
 	}
 
-	public List<AssetLeg> getAssets() {
-		return assets;
-	}
-
-	public void setAssets(List<AssetLeg> assets) {
-		this.assets = assets;
-	}
+	
 	
 	
 }

@@ -1,5 +1,6 @@
 package NoSqlEval.SwapTrade;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class AssetLeg {
@@ -13,6 +14,13 @@ public class AssetLeg {
 	
 	List<AssetFlow> cashflows;
 
+	public AssetLeg(){
+		cashflows = new LinkedList<AssetFlow>();
+	}
+	
+	public void insertCashflow(AssetFlow f){
+		cashflows.add(f);
+	}
 	public String getPorR() {
 		return PorR;
 	}
@@ -73,8 +81,5 @@ public class AssetLeg {
 		return cashflows;
 	}
 
-	public void setCashflows(List<AssetFlow> cashflows) {
-		this.cashflows = cashflows;
-	}
 	
 }
