@@ -1,7 +1,6 @@
 package NoSqlEval.Test;
 
 import java.io.FileWriter;
-import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.Calendar;
 import java.util.LinkedList;
@@ -9,23 +8,46 @@ import java.util.List;
 import java.util.Random;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import NoSqlEval.SwapTrade.AssetFlow;
 import NoSqlEval.SwapTrade.AssetLeg;
 import NoSqlEval.SwapTrade.SwapTrade1;
 
 public class UnitTestCase  {
+	String[] CustList={"HSBCHKH","GS","MS","JP"};
+	String[] bookList= {"BOOK1","BOOK2","BOOK3"};
+	Random random  = new Random(System.currentTimeMillis());
 	
-	SwapTrade1 prepareRandomCCS(String type,double payntl, String payccy,String payindex, double paySpread,double recntl,String recccy,String recindex, double recSpread){
+	private String getRandomBook(){
+		int num = random.nextInt(bookList.length);
+		
+		return bookList[num];
+	}
+	private String getRandomCust(){
+		int num = random.nextInt(CustList.length);
+		
+		return CustList[num]; 
+	}
+	private int getRandomTenor(){
+		int t = random.nextInt(8);
+		return 2+t;
+	}
+	
+	
+	public SwapTrade1 prepareRandomCCS(String type,double payntl, String payccy,String payindex, double paySpread,double recntl,String recccy,String recindex, double recSpread){
 		double rate = 1.0;
+		int tenor = this.getRandomTenor();
 		SwapTrade1 swp = new SwapTrade1();
-		swp.setBook("USDSWP");
+		
+		
+		swp.setBook(this.getRandomBook());
 		swp.setLocation("LONDON");
-		swp.setCustomer("HSBCHKH");
+		swp.setCustomer(this.getRandomCust());
 		Calendar c = Calendar.getInstance();
 		swp.setStartDate(c.getTime());
 		Calendar e = (Calendar)c.clone();
-		e.add(Calendar.YEAR, 1);
+		e.add(Calendar.YEAR, tenor);
 		swp.setEndDate(e.getTime());
 		swp.setSwapType(type);
 		swp.setTradeStatus("VER");
@@ -40,10 +62,10 @@ public class UnitTestCase  {
 		payLeg.setRate(0);
 		payLeg.setSpread(paySpread);
 		payLeg.setType("CCS");
-		for(int i=0;i<2;i++){
+		for(int i=0;i<2*tenor;i++){
 			AssetFlow f = new AssetFlow();
 			f.setCcy(payccy);
-			double amt = payntl *( rate +paySpread/100)/100 /2;
+			double amt = -1*payntl *( rate +paySpread/100)/100 /2;
 			f.setAmount(amt);
 			Calendar st = Calendar.getInstance();
 			st.setTime(swp.getStartDate());
@@ -66,10 +88,10 @@ public class UnitTestCase  {
 		recLeg.setRate(0);
 		recLeg.setSpread(recSpread);
 		recLeg.setType("CCS");
-		for(int i=0;i<2;i++){
+		for(int i=0;i<2*tenor;i++){
 			AssetFlow f = new AssetFlow();
 			f.setCcy(recccy);
-			double amt = payntl *( rate +paySpread/100)/100 /2;
+			double amt = recntl *( rate +paySpread/100)/100 /2;
 			f.setAmount(amt);
 			Calendar st = Calendar.getInstance();
 			st.setTime(swp.getStartDate());
@@ -89,20 +111,21 @@ public class UnitTestCase  {
 	}
 	
 	
-	SwapTrade1 prepareRandomIRS(double ntl, String ccy,String index, double rate){
+	public SwapTrade1 prepareRandomIRS(double ntl, String ccy,String index, double rate){
 		SwapTrade1 swp = new SwapTrade1();
-		swp.setBook("USDSWP");
+		int tenor = this.getRandomTenor();
+		swp.setBook(this.getRandomBook());
 		swp.setLocation("LONDON");
-		swp.setCustomer("HSBCHKH");
+		swp.setCustomer(this.getRandomCust());
 		Calendar c = Calendar.getInstance();
 		swp.setStartDate(c.getTime());
 		Calendar e = (Calendar)c.clone();
-		e.add(Calendar.YEAR, 1);
+		e.add(Calendar.YEAR, tenor);
 		swp.setEndDate(e.getTime());
 		swp.setSwapType("IRS");
 		swp.setTradeStatus("VER");
 		
-		Random random  = new Random(System.currentTimeMillis());
+		
 		double rr = random.nextDouble();
 		boolean payFix=rr>0.5?true:false;
 		
@@ -116,7 +139,7 @@ public class UnitTestCase  {
 		FixLeg.setRate(rate);
 		FixLeg.setSpread(0);
 		FixLeg.setType("IRS");
-		for(int i=0;i<2;i++){
+		for(int i=0;i<2*tenor;i++){
 			AssetFlow f = new AssetFlow();
 			f.setCcy(ccy);
 			double amt = ntl * rate/100 /2 * (payFix?-1:1);
@@ -142,7 +165,7 @@ public class UnitTestCase  {
 		fltLeg.setRate(0);
 		fltLeg.setSpread(0);
 		fltLeg.setType("IRS");
-		for(int i=0;i<2;i++){
+		for(int i=0;i<2*tenor;i++){
 			AssetFlow f = new AssetFlow();
 			f.setCcy(ccy);
 			double amt = ntl * rate/100 /2 * (payFix?1:-1);
@@ -167,7 +190,7 @@ public class UnitTestCase  {
 	
 	public void runIRSUnitTest() throws Throwable {
 		// TODO Auto-generated method stub
-		Random random  = new Random(System.currentTimeMillis());
+		
 		List<SwapTrade1> lst = new LinkedList<SwapTrade1>();
 		double ntl = 100000000;
 		SwapTrade1 swp = prepareRandomIRS(100000000,"USD","LIBOR",0.1);
@@ -184,7 +207,7 @@ public class UnitTestCase  {
 	
 	public void runCCSUnitTest() throws Throwable {
 		// TODO Auto-generated method stub
-		Random random  = new Random(System.currentTimeMillis());
+		
 		List<SwapTrade1> lst = new LinkedList<SwapTrade1>();
 		double usdntl = 100000000;
 		double fxrate = 100 + random.nextGaussian()*10;
@@ -202,7 +225,7 @@ public class UnitTestCase  {
 	}
 	public void runIRS(int num, String fileName) throws Throwable {
 		// TODO Auto-generated method stub
-		Random random = new Random(System.currentTimeMillis());
+		
 		List<SwapTrade1> lst = new LinkedList<SwapTrade1>();
 		double basentl = 100000000;
 
@@ -213,7 +236,7 @@ public class UnitTestCase  {
 			lst.add(swp);
 		}
 
-		Gson gson = new Gson();
+		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssX").create();
 
 		Writer writer = new FileWriter (fileName);
 		
@@ -226,7 +249,7 @@ public class UnitTestCase  {
 	
 	public void runCCS(int num, String fileName) throws Throwable {
 		// TODO Auto-generated method stub
-		Random random = new Random(System.currentTimeMillis());
+		
 		List<SwapTrade1> lst = new LinkedList<SwapTrade1>();
 		double basentl = 100000000;
 
@@ -245,14 +268,14 @@ public class UnitTestCase  {
 			lst.add(swp);
 		}
 
-		Gson gson = new Gson();
+		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssX").create();
 
 		Writer writer = new FileWriter (fileName);
 		
 		// 2. Java object to JSON, and assign to a String
 		gson.toJson(lst,writer);
 		writer.close();
-		System.out.println("Total number of swp generated:"+lst.size());
+		System.out.println("Total number of ccs generated:"+lst.size());
 		
 	}
 	
