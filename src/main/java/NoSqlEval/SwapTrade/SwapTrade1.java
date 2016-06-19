@@ -5,11 +5,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class SwapTrade1 {
+	
+	public enum TradeStatusEnum{NEW,DONE,VER,MAT};
 	String _id;
 	String location;
 	String book;
 	String customer;
-	String TradeStatus;
+	TradeStatusEnum TradeStatus;
 	
 	String SwapType;
 	Date StartDate;
@@ -57,11 +59,13 @@ public class SwapTrade1 {
 		this.customer = customer;
 	}
 
-	public String getTradeStatus() {
+	
+
+	public TradeStatusEnum getTradeStatus() {
 		return TradeStatus;
 	}
 
-	public void setTradeStatus(String tradeStatus) {
+	public void setTradeStatus(TradeStatusEnum tradeStatus) {
 		TradeStatus = tradeStatus;
 	}
 

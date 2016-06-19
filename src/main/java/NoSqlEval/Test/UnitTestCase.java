@@ -13,16 +13,26 @@ import com.google.gson.GsonBuilder;
 import NoSqlEval.SwapTrade.AssetFlow;
 import NoSqlEval.SwapTrade.AssetLeg;
 import NoSqlEval.SwapTrade.SwapTrade1;
+import NoSqlEval.SwapTrade.SwapTrade1.TradeStatusEnum;
 
 public class UnitTestCase  {
 	String[] CustList={"HSBCHKH","GS","MS","JP"};
 	String[] bookList= {"BOOK1","BOOK2","BOOK3"};
+	
+	
 	Random random  = new Random(System.currentTimeMillis());
 	
 	private String getRandomBook(){
 		int num = random.nextInt(bookList.length);
 		
 		return bookList[num];
+	}
+	private TradeStatusEnum getRandomTradeStatus(){
+		TradeStatusEnum status=TradeStatusEnum.NEW;
+		int num = random.nextInt(4);
+		status = TradeStatusEnum.values()[num];
+		
+		return status;
 	}
 	private String getRandomCust(){
 		int num = random.nextInt(CustList.length);
@@ -50,7 +60,8 @@ public class UnitTestCase  {
 		e.add(Calendar.YEAR, tenor);
 		swp.setEndDate(e.getTime());
 		swp.setSwapType(type);
-		swp.setTradeStatus("VER");
+		
+		swp.setTradeStatus(getRandomTradeStatus());
 		
 				
 		//prepare pay asset
@@ -123,7 +134,7 @@ public class UnitTestCase  {
 		e.add(Calendar.YEAR, tenor);
 		swp.setEndDate(e.getTime());
 		swp.setSwapType("IRS");
-		swp.setTradeStatus("VER");
+		swp.setTradeStatus(getRandomTradeStatus());
 		
 		
 		double rr = random.nextDouble();

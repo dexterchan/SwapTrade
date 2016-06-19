@@ -10,9 +10,9 @@ public class Test {
 		// TODO Auto-generated method stub
 		UnitTestCase u = new UnitTestCase();
 
-		u.runIRS(1, "C://Download//lab//mongodb_data//swp.json");
+		u.runIRS(10, "C://Download//lab//mongodb_data//swp.json");
 		//u.runCCSUnitTest();
-		u.runCCS(1, "C://Download//lab//mongodb_data//xswp.json");
+		u.runCCS(10, "C://Download//lab//mongodb_data//xswp.json");
 		
 		SwapTrade1 swp = u.prepareRandomIRS(100000000,"USD","LIBOR",0.1);
 		
