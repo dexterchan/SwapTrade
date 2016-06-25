@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class AssetLeg {
-	String PorR; //Pay or receive
+	String porr; //Pay or receive
 	String type;
 	String ccy;
 	double notional;
@@ -21,12 +21,13 @@ public class AssetLeg {
 	public void insertCashflow(AssetFlow f){
 		cashflows.add(f);
 	}
-	public String getPorR() {
-		return PorR;
+	
+	public String getPorr() {
+		return porr;
 	}
 
-	public void setPorR(String porR) {
-		PorR = porR;
+	public void setPorr(String porr) {
+		this.porr = porr;
 	}
 
 	public String getType() {
@@ -79,6 +80,10 @@ public class AssetLeg {
 
 	public List<AssetFlow> getCashflows() {
 		return cashflows;
+	}
+
+	public void setCashflows(List<AssetFlow> cashflows) {
+		this.cashflows = cashflows;
 	}
 
 	

@@ -3,28 +3,30 @@ package NoSqlEval.SwapTrade;
 import java.util.Date;
 
 public class AssetFlow {
-	Date StartDate;
-	Date EndDate;
-	boolean isPayEnd;
+	Date startDate;
+	Date endDate;
+	boolean payEnd;
 	String ccy;
 	double amount;
+	
 	public Date getStartDate() {
-		return StartDate;
+		return startDate;
 	}
 	public void setStartDate(Date startDate) {
-		StartDate = startDate;
+		this.startDate = startDate;
 	}
 	public Date getEndDate() {
-		return EndDate;
+		return endDate;
 	}
 	public void setEndDate(Date endDate) {
-		EndDate = endDate;
+		this.endDate = endDate;
 	}
+	
 	public boolean isPayEnd() {
-		return isPayEnd;
+		return payEnd;
 	}
-	public void setPayEnd(boolean isPayEnd) {
-		this.isPayEnd = isPayEnd;
+	public void setPayEnd(boolean payEnd) {
+		this.payEnd = payEnd;
 	}
 	public String getCcy() {
 		return ccy;

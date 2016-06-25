@@ -18,7 +18,7 @@ import NoSqlEval.SwapTrade.SwapTrade1.TradeStatusEnum;
 public class UnitTestCase  {
 	String[] CustList={"HSBCHKH","GS","MS","JP"};
 	String[] bookList= {"BOOK1","BOOK2","BOOK3"};
-	
+	String[] TradeStatus= {"NEW","DONE","VER","MAT"};
 	
 	Random random  = new Random(System.currentTimeMillis());
 	
@@ -27,12 +27,12 @@ public class UnitTestCase  {
 		
 		return bookList[num];
 	}
-	private TradeStatusEnum getRandomTradeStatus(){
+	private String getRandomTradeStatus(){
 		TradeStatusEnum status=TradeStatusEnum.NEW;
 		int num = random.nextInt(4);
-		status = TradeStatusEnum.values()[num];
+		//status = TradeStatusEnum.values()[num];
 		
-		return status;
+		return TradeStatus[num];
 	}
 	private String getRandomCust(){
 		int num = random.nextInt(CustList.length);
@@ -69,7 +69,7 @@ public class UnitTestCase  {
 		payLeg.setCcy(payccy);
 		payLeg.setIndex(payindex);
 		payLeg.setNotional(payntl);
-		payLeg.setPorR( "P");
+		payLeg.setPorr( "P");
 		payLeg.setRate(0);
 		payLeg.setSpread(paySpread);
 		payLeg.setType("CCS");
@@ -95,7 +95,7 @@ public class UnitTestCase  {
 		recLeg.setCcy(recccy);
 		recLeg.setIndex(recindex);
 		recLeg.setNotional(recntl);
-		recLeg.setPorR("R");
+		recLeg.setPorr("R");
 		recLeg.setRate(0);
 		recLeg.setSpread(recSpread);
 		recLeg.setType("CCS");
@@ -146,7 +146,7 @@ public class UnitTestCase  {
 		FixLeg.setCcy(ccy);
 		FixLeg.setIndex("Fixed");
 		FixLeg.setNotional(ntl);
-		FixLeg.setPorR( payFix?"P":"R");
+		FixLeg.setPorr( payFix?"P":"R");
 		FixLeg.setRate(rate);
 		FixLeg.setSpread(0);
 		FixLeg.setType("IRS");
@@ -172,7 +172,7 @@ public class UnitTestCase  {
 		fltLeg.setCcy(ccy);
 		fltLeg.setIndex(index);
 		fltLeg.setNotional(ntl);
-		fltLeg.setPorR(payFix?"R":"P");
+		fltLeg.setPorr(payFix?"R":"P");
 		fltLeg.setRate(0);
 		fltLeg.setSpread(0);
 		fltLeg.setType("IRS");
@@ -234,6 +234,45 @@ public class UnitTestCase  {
 		System.out.println(jsonInString);
 		
 	}
+	
+	public List<SwapTrade1> runIRSLst(int num) throws Throwable {
+		// TODO Auto-generated method stub
+		
+		List<SwapTrade1> lst = new LinkedList<SwapTrade1>();
+		double basentl = 100000000;
+
+		for( int i=0;i<num;i++){
+			double ntl = basentl += random.nextGaussian() *  basentl;
+			SwapTrade1 swp = prepareRandomIRS(ntl, "USD", "LIBOR", 0.1);
+	
+			lst.add(swp);
+		}
+		return lst;
+	}
+	public List<SwapTrade1> runCCSLst(int num) throws Throwable {
+		// TODO Auto-generated method stub
+		
+		List<SwapTrade1> lst = new LinkedList<SwapTrade1>();
+		double basentl = 100000000;
+
+		for( int i=0;i<num;i++){
+			double direction=random.nextDouble();
+			double usdntl = basentl;
+			double fxrate = 100 + random.nextGaussian()*10;
+			double jpyntl=usdntl * fxrate;
+			SwapTrade1 swp=null;
+			if(direction<0.5){
+				swp = this.prepareRandomCCS("CCSMTM", usdntl, "USD", "LIBOR", 0, jpyntl, "JPY", "LIBOR", 0.1);
+			}else{
+				swp = this.prepareRandomCCS("CCSMTM", jpyntl, "JPY", "LIBOR", 0.1, usdntl, "USD", "LIBOR", 0);
+			}
+	
+			lst.add(swp);
+		}
+
+		return lst;
+		
+	}
 	public void runIRS(int num, String fileName) throws Throwable {
 		// TODO Auto-generated method stub
 		
@@ -288,6 +327,12 @@ public class UnitTestCase  {
 		writer.close();
 		System.out.println("Total number of ccs generated:"+lst.size());
 		
+	}
+	
+	public void changeTradeStatus(List<SwapTrade1> lst, String toState){
+		for(SwapTrade1 swp : lst){
+			swp.setTradeStatus(toState);
+		}
 	}
 	
 }

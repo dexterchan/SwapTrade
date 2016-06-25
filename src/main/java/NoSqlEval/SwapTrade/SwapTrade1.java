@@ -4,18 +4,36 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.mongojack.ObjectId;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class SwapTrade1 {
 	
 	public enum TradeStatusEnum{NEW,DONE,VER,MAT};
-	String _id;
+	
+	private String id;
+
+	@ObjectId
+	@JsonProperty("_id")
+	public String getId() {
+		return id;
+	}
+
+	@ObjectId
+	@JsonProperty("_id")
+	public void setId(String id) {
+		this.id = id;
+	}
+
 	String location;
 	String book;
 	String customer;
-	TradeStatusEnum TradeStatus;
+	String tradeStatus;
 	
-	String SwapType;
-	Date StartDate;
-	Date EndDate;
+	String swapType;
+	Date startDate;
+	Date endDate;
 	
 	List<AssetLeg> assets;
 	
@@ -27,14 +45,7 @@ public class SwapTrade1 {
 		assets.add(f);
 	}
 	
-	public String get_id() {
-		return _id;
-	}
-
-	public void set_id(String _id) {
-		this._id = _id;
-	}
-
+	
 	public String getLocation() {
 		return location;
 	}
@@ -61,38 +72,47 @@ public class SwapTrade1 {
 
 	
 
-	public TradeStatusEnum getTradeStatus() {
-		return TradeStatus;
+	public String getTradeStatus() {
+		return tradeStatus;
 	}
 
-	public void setTradeStatus(TradeStatusEnum tradeStatus) {
-		TradeStatus = tradeStatus;
+	public void setTradeStatus(String tradeStatus) {
+		this.tradeStatus = tradeStatus;
 	}
 
 	public String getSwapType() {
-		return SwapType;
+		return swapType;
 	}
 
 	public void setSwapType(String swapType) {
-		SwapType = swapType;
+		this.swapType = swapType;
 	}
 
 	public Date getStartDate() {
-		return StartDate;
+		return startDate;
 	}
 
 	public void setStartDate(Date startDate) {
-		StartDate = startDate;
+		this.startDate = startDate;
 	}
 
 	public Date getEndDate() {
-		return EndDate;
+		return endDate;
 	}
 
 	public void setEndDate(Date endDate) {
-		EndDate = endDate;
+		this.endDate = endDate;
 	}
 
+	public List<AssetLeg> getAssets() {
+		return assets;
+	}
+
+	public void setAssets(List<AssetLeg> assets) {
+		this.assets = assets;
+	}
+
+	
 	
 	
 	
